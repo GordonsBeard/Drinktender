@@ -11,7 +11,7 @@ The actual recipe library.
 #####Features:
 + Can import/add Recipes through text files. (See recipes.txt for examples)
 
-Each Recipe identifies:
+#####Each Recipe identifies:
 + Name			(string)
 + Glass			(Glass object containing Name and eventually Size of glass.)
 + Ingredients	(List of Dictionary<Ingredient, string> representing the Ingredient and the amount for the drink.)
