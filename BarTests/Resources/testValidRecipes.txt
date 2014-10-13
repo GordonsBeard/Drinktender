@@ -1,0 +1,2 @@
+﻿"Rum & Coke",Rocks,1.5:WhiteRum,4.5:Cola
+"Long Island",Highball,.5:Tequila,.5:Vodka,.5:WhiteRum,.5:Gin,.5:TripleSec,.75:LemonJuice,1:SimpleSyrup

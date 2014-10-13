@@ -1,0 +1,11 @@
+﻿// Liquors
+Vodka,liquor
+Rum,White Rum,liquor
+Spiced Rum,liquor
+Dark Rum,liquor
+Gin,liquor
+Tequila,liquor
+Cola,soda
+TripleSec,liqueur
+SimpleSyrup,syrup
+Ice,ice
