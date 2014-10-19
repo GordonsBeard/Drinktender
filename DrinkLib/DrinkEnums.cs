@@ -23,6 +23,7 @@ namespace DrinkLib
             Hurricane,
             Mug,
             Pint,
+            Undefined,
         }
         public enum IngredientTypeEnum
         {
@@ -34,7 +35,7 @@ namespace DrinkLib
             Syrup,
             Food,
             Ice,
-            Unknown,
+            Undefined,
         }
 
         public enum IngredientTypeUnits

@@ -11,13 +11,24 @@ namespace DrinkLib
     /// The Ingredients contain information on their name and type.
     /// Type will be Unknown/Undefined if added just by name.
     /// </summary>
-    public class Ingredient : IComparable<Ingredient>
+    public class Ingredient
     {
         // Properties
-        private string Name { get; set; }
+        public string Name { get; set; }
         public IngredientType Type { get; set; }
 
         // Constructors
+        public Ingredient()
+        {
+            this.Name = String.Empty;
+            this.Type = new IngredientType(DrinkEnums.IngredientTypeEnum.Undefined);
+        }
+
+        public Ingredient(string name)
+        {
+            this.Name = name;
+            this.Type = new IngredientType(DrinkEnums.IngredientTypeEnum.Undefined);
+        }
         public Ingredient(string name, IngredientType type)
         {
             this.Name = name;
@@ -27,29 +38,13 @@ namespace DrinkLib
         // Overrides
         public override string ToString()
         {
-            return this.Name;
-        }
-
-        public int CompareTo(Ingredient other)
-        {
-            if (other == null)
-            {
-                return 1;
-            }
-            if (this.Equals(other))
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
+            return String.Format("Ingredient: {0}", this.Name);
         }
     }
 
     /// <summary>
     /// IngredientType will define the units, and eventually, color and weight
-    /// and what have you.
+    /// and glassEnum have you.
     /// </summary>
     public class IngredientType
     {
@@ -82,11 +77,16 @@ namespace DrinkLib
                     this.Units = DrinkEnums.IngredientTypeUnits.scoop;
                     break;
 
-                case DrinkEnums.IngredientTypeEnum.Unknown:
+                case DrinkEnums.IngredientTypeEnum.Undefined:
                 default:
                     this.Units = DrinkEnums.IngredientTypeUnits.Undefined;
                     break;
             }
+        }
+
+        public IngredientType(string name)
+        {
+
         }
 
         public override string ToString()

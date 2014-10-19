@@ -31,6 +31,7 @@ namespace DrinkLib
         }
 
         public Glass Glass { get; set; }
+
         public Dictionary<Ingredient, string> Ingredients { get; set; }
 
         // Constructors
@@ -44,61 +45,40 @@ namespace DrinkLib
         // Overrides
         public override string ToString()
         {
-            return this.Name;
-        }
-
-        public bool Equals(Recipe newRecipe)
-        {
-            if (new RecipeSameIngredients().Equals(this, newRecipe))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
+            return String.Format("Recipe: {0}", this.Name);
         }
 
         public override int GetHashCode()
         {
-            int hashCode = this.Ingredients.ToString().GetHashCode();
-            return hashCode.GetHashCode();
-        }
-    }
+            int hashCode = String.Join(", ", this.Ingredients.ToString()).GetHashCode();
+            hashCode = (hashCode * 17) + this.Name.ToString().GetHashCode();
 
-    /// <summary>
-    /// Allows for Recipes to be compared.
-    /// </summary>
-    public class RecipeSameIngredients : EqualityComparer<Recipe>
-    {
-        /// <summary>
-        /// Checks the name of the glass, and number/name of all Ingredients.
-        /// </summary>
-        /// <param name="d1">First Recipe</param>
-        /// <param name="d2">Second Recipe</param>
-        /// <returns>If true, the two drinks are effectively the same thing.</returns>
-        public override bool Equals(Recipe d1, Recipe d2)
+            return hashCode;
+        }
+
+        public bool Equals(Recipe other)
         {
             bool same = true;
-            List<Ingredient> testc = d1.Ingredients.Keys.ToList();
-            List<Ingredient> testd = d2.Ingredients.Keys.ToList();
 
-            same &= d1.Glass == d2.Glass;
-            same &= !(d1.Ingredients.Except(d2.Ingredients).Any());
+            Dictionary<Ingredient, string> dict1 = this.Ingredients;
+            Dictionary<Ingredient, string> dict2 = other.Ingredients;
+
+            same &= dict1.Keys.SequenceEqual(dict2.Keys) ? true : false;
+
+            same &= this.Glass == other.Glass ? true : false;
+
+            same &= !(this.Ingredients.Except(other.Ingredients).Any());
 
             return same;
         }
 
-        public override int GetHashCode(Recipe obj)
+        public int GetHashCode(Recipe obj)
         {
             throw new NotImplementedException();
         }
+
     }
+
 
     /// <summary>
     /// The RecipeCollection will be the master DrinkBook for consumers of the library to use.
@@ -136,32 +116,44 @@ namespace DrinkLib
 
         public void Add(Recipe newDrink)
         {
+            #if DEBUG
+            Console.WriteLine("");
+            Console.WriteLine("Add {0}", newDrink.ToString());
+            #endif
+
             // Before adding, make sure the Recipe does not exist in the RecipeCollection.
             if (!Contains(newDrink))
             {
+                #if DEBUG
+                Console.WriteLine("Adding drink to innerCol.\t\tinnerCol: {0}", innerCol.Count);
+                #endif  
+                
                 // If false, the Recipe is brand new to the RecipeCollection (via innerCol).
                 innerCol.Add(newDrink);
-            }
-            else
-            {
-                throw new RecipeAlreadyExistsException();
+                
+                #if DEBUG
+                Console.WriteLine("Added.\t\t\t\tinnerCol: {0}", innerCol.Count);
+                #endif
             }
         }
 
         public bool Contains(Recipe newDrink)
         {
-            bool found = false;
+            bool drinkExists = false;
+
             // Go through the list of current drinks (innerCol) and then compare
             // each of the Recipes to each other.
             foreach (Recipe drink in innerCol)
             {
-                if (drink.Equals(newDrink))
+                if (drinkExists = newDrink.GetHashCode() == drink.GetHashCode())
                 {
-                    found = true;
-                    return found;
+#if DEBUG
+                    Console.WriteLine("Hashes: {0} ({1}) and {2} ({3}) are same.", newDrink.GetHashCode().ToString(), newDrink.Name, drink.GetHashCode().ToString(), drink.Name);
+#endif
+                    drinkExists = true;
                 }
             }
-            return found;
+            return drinkExists;
         }
 
         public void Clear()
@@ -197,7 +189,7 @@ namespace DrinkLib
             {
                 Recipe curRecipe = (Recipe)innerCol[i];
 
-                if (new RecipeSameIngredients().Equals(curRecipe, item))
+                if (curRecipe.Equals(item))
                 {
                     innerCol.RemoveAt(i);
                     result = true;
@@ -205,7 +197,18 @@ namespace DrinkLib
                 }
             }
             return result;
-        }   
+        }
+
+        public string ListDrinks()
+        {
+            string drinkNames;
+            drinkNames = "Drinks:";
+            foreach (Recipe drink in innerCol)
+            {
+                drinkNames += String.Format("\n{0}", drink.Name);
+            }
+            return drinkNames;
+        }
     }
     
     /// <summary>

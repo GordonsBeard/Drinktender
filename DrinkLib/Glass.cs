@@ -16,24 +16,40 @@ namespace DrinkLib
             get { return this.glassType; }
             set
             {
-                if (Enum.IsDefined(typeof(DrinkEnums.GlassTypeEnum), value))
-                {
-                    // Only set the glass type if it is indeed one of the glass types.
-                    this.glassType = value;
-                }
+                this.SetType(value);
             }
         }
 
         // Constructors
+        public Glass()
+        {
+            this.Type = DrinkEnums.GlassTypeEnum.Undefined;
+        }
         public Glass(DrinkEnums.GlassTypeEnum type)
         {
             this.Type = type;
         }
 
+        public Glass(string impliedType)
+        {
+            this.Type = ((DrinkEnums.GlassTypeEnum)Enum.Parse(typeof(DrinkEnums.GlassTypeEnum), impliedType.Trim()));
+        }
+
+        // Functions
+        public void SetType(string impliedType)
+        {
+            DrinkEnums.GlassTypeEnum glassEnum = (DrinkEnums.GlassTypeEnum)Enum.Parse(typeof(DrinkEnums.GlassTypeEnum), impliedType.ToString());
+            this.glassType = glassEnum;
+        }
+        public void SetType(DrinkEnums.GlassTypeEnum glassEnum)
+        {
+            this.glassType = glassEnum;
+        }
+
         // Overrides
         public override string ToString()
         {
-            return this.Type.ToString();
+            return String.Format("Glass: {0}", this.Type.ToString());
         }
     }
 }

@@ -64,6 +64,7 @@
     <Content Include="Resources\testInvalidRecipesEmptyFile.txt" />
     <Content Include="Resources\testInvalidRecipesGarbage.txt" />
     <Content Include="Resources\testInvalidRecipesShuffledIngredients.txt" />
+    <Content Include="Resources\testInvalidRecipesStrangeFormatting.txt" />
     <Content Include="Resources\testValidRecipes.txt" />
   </ItemGroup>
   <Choose>
