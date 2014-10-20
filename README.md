@@ -17,4 +17,10 @@ The actual recipe library.
 + Ingredients	(List of Dictionary<Ingredient, string> representing the Ingredient and the amount for the drink.)
 
 ### BarTests
-Drinktender is fully tested. Unit tests can be found in BarTests, ran via VS.
+DrinkLib is tested with a bunch of unit tests. Currently the config files are hardcoded, that will change.
+Other than this they pass before every commit.
+
+### DrinktenderUI
+Command line interface for example usage.
+
+Edit recipies.txt to add/remove drinks.
