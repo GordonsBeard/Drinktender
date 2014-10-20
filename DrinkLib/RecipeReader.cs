@@ -29,9 +29,10 @@ namespace DrinkLib
 
             // Put each recipe onto it's own line for parsing.
             string[] lines = System.IO.File.ReadAllLines(target);
-#if DEBUG
+
+            #if DEBUG
             Console.WriteLine("Lines read to array. Apparent recipes:\t{0}", lines.Length);
-#endif
+            #endif
 
             // Fill this list with drinks to add.
             List<Recipe> tempRecipesToAdd = new List<Recipe>();
@@ -54,7 +55,7 @@ namespace DrinkLib
                     // There should be at minimum 3 elements. Name, Glass, Ingredient
                     if (fields.Length < 3)
                     {
-                        throw new InvalidRecipeLineException();
+                        throw new InvalidRecipeLineException(fields);
                     }
 
                     // set the drink name
@@ -64,16 +65,15 @@ namespace DrinkLib
                     string tempGlassName = fields[1];
 
                     Glass tempGlass = new Glass();
+
+                    // If it's an Invalid Glass, abort.
                     try
                     {
                         tempGlass.SetType(tempGlassName);
                     }
-                    catch (ArgumentException)
+                    catch (InvalidGlassException ex)
                     {
-#if DEBUG
-                        Console.WriteLine("Bad drink: {0}", String.Join(", ",fields.ToList()));
-#endif
-                        break;
+                        throw ex;
                     }
                     
                     string tempIngName;
@@ -85,6 +85,11 @@ namespace DrinkLib
                     foreach (string rawIngredients in fields.Skip(2))
                     {
                         string[] ingredientPair = rawIngredients.Split(':');
+                        
+                        if (ingredientPair.Length != 2)
+                        {
+                            throw new InvalidRecipeLineException(fields);
+                        }
 
                         try
                         {
@@ -100,12 +105,16 @@ namespace DrinkLib
                         IngredientType tempIngredientType = new IngredientType(tempIngName);
                         Ingredient tempIngredient = new Ingredient(tempIngName, tempIngredientType);
 
-                        // compile temporary ingredient dictionary.
+                        // if there are duplicate ingredients, abort importing.
+                        bool value = tempIngDict.ContainsKey(tempIngredient);
+
                         tempIngDict.Add(tempIngredient, tempIngAmount);
                     }
-#if DEBUG
+
+                    #if DEBUG
                     Console.WriteLine("Creating Recipe: {0},\t({1}),\t({2})", tempDrinkName, tempGlass, String.Join(", ", tempIngDict.Keys.ToList()));
-#endif
+                    #endif
+
                     Recipe newRecipe = new Recipe(tempDrinkName, tempGlass, tempIngDict);
                     tempRecipesToAdd.Add(newRecipe);
                 }
@@ -116,24 +125,24 @@ namespace DrinkLib
                 {
                     try
                     {
-#if DEBUG
+                        #if DEBUG
                         Console.WriteLine("");
-                        Console.WriteLine("Adding {0}.\tDrink Book Count = {1}", newRecipe.ToString(), drinkBook.Count);
-#endif
+                        Console.WriteLine("Adding {0}.\t\tDrink Book Count = {1}", newRecipe.ToString(), drinkBook.Count);
+                        #endif
 
                         drinkBook.Add(newRecipe);
 
-#if DEBUG
+                        #if DEBUG
                         Console.WriteLine("");
                         Console.WriteLine("Drink Book Count = {0}", drinkBook.Count);
-#endif
+                        #endif
                     }
-                    catch (RecipeAlreadyExistsException)
+                    catch (DuplicateRecipeException)
                     {
-#if DEBUG
+                        #if DEBUG
                         Console.WriteLine("");
                         Console.WriteLine("Exception Caught: {0} already exists in collection.", newRecipe.ToString());
-#endif
+                        #endif
                     }
                 }
             }

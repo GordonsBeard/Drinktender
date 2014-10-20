@@ -10,6 +10,7 @@ namespace DrinkLib
     {
         public enum GlassTypeEnum
         {
+            Undefined,
             Bottle,
             Margarita,
             Highball,
@@ -23,10 +24,10 @@ namespace DrinkLib
             Hurricane,
             Mug,
             Pint,
-            Undefined,
         }
         public enum IngredientTypeEnum
         {
+            Undefined,
             Alcohol,
             Liqueur,
             Soda,
@@ -35,16 +36,15 @@ namespace DrinkLib
             Syrup,
             Food,
             Ice,
-            Undefined,
         }
 
         public enum IngredientTypeUnits
         {
+            Undefined,
             oz,
             piece,
             dash,
             scoop,
-            Undefined,
         }
     }
 }

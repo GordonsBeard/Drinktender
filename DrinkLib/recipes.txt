@@ -1,3 +1,5 @@
-﻿"Rum & Coke",Rocks,1.5:WhiteRum,4.5:Cola
-"Long Island",Highball,.5:Tequila,.5:Vodka,.5:WhiteRum,.5:Gin,.5:TripleSec,.75:LemonJuice,1:SimpleSyrup
-"Long Island",Highball,.5:Tequila,.5:Vodka,.5:WhiteRum,.5:Gin,.5:TripleSec,1:SimpleSyrup,.75:LemonJuice
+﻿Gin & Tonic,	Rocks,		1.5:Gin, 4.5:Tonic
+Rum & Coke,		Rocks,		1.5:WhiteRum, 4.5:Cola
+B52,			Shotglass,	.66:Kahlua, .66:Irish Creme, .66:Grand Marnier
+Long Island,	Highball,	.5:Tequila, .5:Vodka, .5:White Rum, .5:Gin, .5:Triple Sec, .75:Lemon Juice, 1:Simple Syrup
+Dry Martini,	Martini,	2:Vodka, .33:Dry Vermouth, .33:Olive Juice, 1:Olive

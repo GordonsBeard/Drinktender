@@ -2,6 +2,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BarTests
 {
@@ -12,14 +13,8 @@ namespace BarTests
 
         // Drinks
         const string testDrinkName = "Test & Debug";    // Normal name
-        const string testBlankDrinkName = "";           // Blank string name.
-        string testEmptyDrinkName = String.Empty; // Empty string name.
-        const string testNullDrinkName = null;          // Null string name. 
-        const string testLongName = "Somewhat Threatening Sophisticated Professional Killstreak Carbondado Botkiller Stickybomb Launcher Mk.I";
-                                                        // Long string name.
-        // Glasses
-        const string testRocksGlassName = "Glass: Rocks";          // Proper cased rocks glass.
 
+        // Glasses
         Glass testRocksGlass = new Glass(DrinkEnums.GlassTypeEnum.Rocks);
 
         // Ingredients
@@ -32,7 +27,7 @@ namespace BarTests
         /// Tests the creation of a Rocks glass' ToString response.
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Glass")]
+        [TestCategory("Glass")]
         public void Valid_Glass()
         {
             string expectedString = "Glass: Rocks";
@@ -46,10 +41,10 @@ namespace BarTests
         }
 
         /// <summary>
-        /// Test the SetType function of Glass.
+        /// Test the SetType function of Glass with valid inputs.
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Glass")]
+        [TestCategory("Glass")]
         public void Valid_Glass_SetType()
         {
             string expectedString = "Glass: Rocks";
@@ -65,7 +60,34 @@ namespace BarTests
 
             Console.WriteLine("Expected:\t{0}\tActual:\t{1}", expectedString, actualString);
             Assert.AreEqual(expectedString, actualString, "Glass names.");
+        }
 
+        /// <summary>
+        /// Test the SetType function of Glass with invalid inputs.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Glass")]
+        public void Invalid_Glass_SetType_String()
+        {
+            bool success = false;
+            string expectedString = String.Empty;
+            string invalidGlassName = "Bathtub";
+
+            try
+            {
+                Console.WriteLine("Building drink with {0} as glass type.", invalidGlassName);
+                Glass testGlass = new Glass(invalidGlassName);
+                Console.WriteLine("Test Glass initialized.");
+            }
+            catch (InvalidGlassException)
+            {
+                Console.WriteLine("Invalid Glass exception thrown/caught successfully.");
+            }
+            finally
+            {
+                success = true;
+            }
+            Assert.AreEqual(true, success, "Exception Not Thrown.");           
         }
         #endregion
 
@@ -74,15 +96,49 @@ namespace BarTests
         /// Tests valid Ingredients being formed and their ToString methods.
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Ingredients")]
+        [TestCategory("Ingredients")]
         public void Valid_Ingredient()
         {
-            string expectedString = String.Format("Ingredient: {0}", testRumName);
+            string expectedString = String.Format("{0}", testRumName);
             string actualString;
 
             IngredientType testAlcoholType = new IngredientType(DrinkEnums.IngredientTypeEnum.Alcohol);
             Ingredient testRum = new Ingredient(testRumName, testAlcoholType);
             actualString = testRum.ToString();
+
+            Console.WriteLine("Expected:\t\"{0}\"\nActual:\t\t\"{1}\"", expectedString, actualString);
+            Assert.AreEqual(expectedString, actualString);
+        }
+
+        /// <summary>
+        /// Test a valid Ingredient from just the name.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Ingredient")]
+        public void Valid_Ingredient_From_String()
+        {
+            string expectedString = String.Format("{0}", testRumName);
+            string actualString;
+
+            Ingredient testRum = new Ingredient(testRumName);
+            actualString = testRum.ToString();
+
+            Console.WriteLine("Expected:\t\"{0}\"\nActual:\t\t\"{1}\"", expectedString, actualString);
+            Assert.AreEqual(expectedString, actualString);
+        }
+
+        /// <summary>
+        /// Test an empty Ingredient instantiation.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Ingredient")]
+        public void Valid_Ingredient_Empty()
+        {
+            string expectedString = String.Format("{0}", String.Empty);
+            string actualString;
+
+            Ingredient testEmptyIngredient = new Ingredient();
+            actualString = testEmptyIngredient.ToString();
 
             Console.WriteLine("Expected:\t\"{0}\"\nActual:\t\t\"{1}\"", expectedString, actualString);
             Assert.AreEqual(expectedString, actualString);
@@ -94,10 +150,10 @@ namespace BarTests
         /// Test a completely valid pre-built Recipe, and it's ToString override.
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Recipe")]
+        [TestCategory("Recipe")]
         public void Valid_Recipe()
         {
-            string expectedString = String.Format("Recipe: {0}", testDrinkName);
+            string expectedString = String.Format("{0}", testDrinkName);
             string actualString;
 
             IngredientType testAlcoholType = new IngredientType(DrinkEnums.IngredientTypeEnum.Alcohol);
@@ -115,14 +171,6 @@ namespace BarTests
             Console.WriteLine("Expected:\t\"{0}\"\nActual:\t\t\"{1}\"", expectedString, actualString);
             Assert.AreEqual(expectedString, actualString);
         }
-
-        /// <summary>
-        /// Ensures a drink can only have one type of ingredient.
-        /// </summary>
-        public void Invalid_Recipe_Duplicate_Ingredients()
-        {
-
-        }
         #endregion
 
         #region Recipie Collection Tests
@@ -130,7 +178,7 @@ namespace BarTests
         /// Makes sure two identicle drinks cannot be added to the database.
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Recipe")]
+        [TestCategory("Recipe")]
         public void Invalid_RecipeCollection_Shuffled_Ingredients_Duplicate()
         {
             int expectedDrinks = 1;
@@ -176,7 +224,7 @@ namespace BarTests
         /// Ensures two drinks with the same ingredients (but in a different order) don't get entered.
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Recipe")]
+        [TestCategory("Recipe")]
         public void Invalid_RecipeCollection_Shuffled_Duplicate_Recipe()
         {
             int expectedDrinks = 1;
@@ -222,7 +270,7 @@ namespace BarTests
         /// Ensureus a drink can be removed from the Collection via .Remove()
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Recipe Collection")]
+        [TestCategory("Recipe Collection")]
         public void Valid_Remove_Recipe_From_Collection()
         {
             int expectedDrinks = 0;
@@ -241,7 +289,7 @@ namespace BarTests
             Recipe testRumCoke = new Recipe(testDrinkName, testRocksGlass, rumAndColaIngredientsDict);
 
             testDrinkBook.Add(testRumCoke);
-            Console.WriteLine("Added {0} to Drink Book.\t Drink Book Count = {1}", testRumCoke.ToString(), testDrinkBook.Count);
+            Console.WriteLine("Added {0} to Drink Book.\t\tDrink Book Count = {1}", testRumCoke.ToString(), testDrinkBook.Count);
 
             Console.WriteLine("Attempting to remove the drink we just added.");
             testDrinkBook.Remove(testRumCoke);
@@ -250,26 +298,53 @@ namespace BarTests
             Assert.AreEqual(expectedDrinks, actualDrinks, "FAIL");
             Console.WriteLine("Number of drinks remaining: {0} (Expected: {1})", actualDrinks, expectedDrinks);
         }
-        #endregion
 
-        #region Reciper Reader Tests
-        /// <summary>
-        /// Will test loading the 2 valid drinks from Resources\testValidRecipes.txt.
-        /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Input/Output")]
-        public void Valid_LoadFromFile()
+        [TestCategory("Recipe Collection")]
+        public void Return_Random_Drink()
         {
-            int expectedDrinks = 2;
-
-            string testRecipes = @"BarTests\Resources\testValidRecipes.txt";
+            bool success = false;
+            string testRecipes = @"\BarTests\Resources\testValidRecipes.txt";
 
             RecipeCollection testDrinkBook = new RecipeCollection();
             RecipeReader newReader = new RecipeReader();
 
             testDrinkBook = newReader.loadRecipesFromFile(testDrinkBook, testRecipes);
 
-            Console.WriteLine("Expected drinks: {0}. Actual drinks: {1}", 2, testDrinkBook.Count);
+            Console.WriteLine("Picking random drinks from {0} drinks.", testDrinkBook.Count);
+            Recipe randomRecipe = testDrinkBook.RandomDrink();
+
+            if (randomRecipe != null)
+            {
+                success = true;
+                Console.WriteLine("Random drink collected:\n{0}", randomRecipe.Name);
+            }
+
+            Assert.AreEqual(true, success, "Random drink not retrieved.");
+        }
+        #endregion
+
+        #region Reciper Reader Tests
+        /// <summary>
+        /// Will test loading the 2 valid drinks from Resources\testValidRecipes.txt.
+        /// Small note: files over 4GB will choke on memeory here.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Input/Output")]
+        public void Valid_LoadFromFile()
+        {
+            string testRecipes = @"C:\Users\doc\Documents\GitHub\Drinktender\BarTests\Resources\testValidRecipes.txt";
+            int lineCount = File.ReadAllLines(testRecipes).Length;
+            int expectedDrinks = lineCount;
+
+            testRecipes = @"\BarTests\Resources\testValidRecipes.txt";
+
+            RecipeCollection testDrinkBook = new RecipeCollection();
+            RecipeReader newReader = new RecipeReader();
+
+            testDrinkBook = newReader.loadRecipesFromFile(testDrinkBook, testRecipes);
+
+            Console.WriteLine("Expected drinks: {0}. Actual drinks: {1}", expectedDrinks, testDrinkBook.Count);
             Assert.AreEqual(expectedDrinks, testDrinkBook.Count, "FAIL");
         }
 
@@ -279,7 +354,7 @@ namespace BarTests
         /// uses Resources\testInvalidRecipesDuplicateDrinks.txt
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Input/Output")]
+        [TestCategory("Input/Output")]
         public void Invalid_LoadFromFile_Duplicates()
         {
             int expectedDrinks = 1;
@@ -304,11 +379,39 @@ namespace BarTests
         }
 
         /// <summary>
+        /// Ensures a drink can only have one type of ingredient.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Recipe")]
+        public void Invalid_LoadFromFile_Duplicate_Ingredients()
+        {
+            int expectedDrinks = 1;
+            int actualDrinks;
+            string expectedString = "Drinks:\nRum & Coke";
+            string actualString;
+
+            string testRecipeFile = @"BarTests\Resources\testInvalidRecipesDuplicateIngredients.txt";
+
+            RecipeCollection testDrinkBook = new RecipeCollection();
+            RecipeReader newReader = new RecipeReader();
+
+            testDrinkBook = newReader.loadRecipesFromFile(testDrinkBook, testRecipeFile);
+            actualDrinks = testDrinkBook.Count;
+            Assert.AreEqual(expectedDrinks, actualDrinks);
+            Console.WriteLine("Expected Drinks:\t{0}\tActual Drinks:\t{1}", expectedDrinks, actualDrinks);
+
+            actualString = testDrinkBook.ListDrinks();
+
+            Assert.AreEqual(expectedString, actualString, "Wrong drink list.");
+            Console.WriteLine("\nExpected:\n{0}\n\nActual:\n{1}", expectedString, actualString);
+        }
+
+        /// <summary>
         /// Test that two drinks with identical ingredients (in a different order), result in only
         /// one drink being added. (No Duplicates)
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Input/Output")]
+        [TestCategory("Input/Output")]
         public void Invalid_LoadFromFile_Shuffled_Duplicates()
         {
             int expectedDrinks = 1;
@@ -336,7 +439,7 @@ namespace BarTests
         /// Test that no drinks are added from an empty file.
         /// </summary>
         [TestMethod]
-        [TestCategory("BVT"), TestCategory("Input/Output")]
+        [TestCategory("Input/Output")]
         public void Invalid_LoadFromFile_Test_Empty_File()
         {
             bool success = true;
@@ -360,18 +463,32 @@ namespace BarTests
         [TestCategory("Input/Output")]
         public void Invalid_LoadFromFile_Test_Garbage_File()
         {
-            bool success = true;
+            bool success = false;
+            int actualDrinks;
+            int expectedDrinks = 0;
 
             string testRecipes = @"BarTests\Resources\testInvalidRecipesGarbage.txt";
 
             RecipeCollection testDrinkBook = new RecipeCollection();
             RecipeReader newReader = new RecipeReader();
 
-            testDrinkBook = newReader.loadRecipesFromFile(testDrinkBook, testRecipes);
+            try
+            {
+                testDrinkBook = newReader.loadRecipesFromFile(testDrinkBook, testRecipes);
+            }
+            catch (InvalidRecipeLineException e)
+            {
+                success = true;
+                Console.WriteLine("Invalid line caught: {0}", e);
+            }
+            finally
+            {
+                Assert.AreEqual(true, success, "Exception not thrown.");
+            }
 
-            success &= (testDrinkBook.Count == 0);
+            actualDrinks = testDrinkBook.Count;
 
-            Assert.AreEqual(success, true, "Expected drinks: {0}. Actual drinks: {1}", 0, testDrinkBook.Count);
+            Assert.AreEqual(expectedDrinks, actualDrinks, "A \"garbage\" drink was entered.");
         }
 
         /// <summary>

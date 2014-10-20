@@ -45,7 +45,7 @@ namespace DrinkLib
         // Overrides
         public override string ToString()
         {
-            return String.Format("Recipe: {0}", this.Name);
+            return this.Name;
         }
 
         public override int GetHashCode()
@@ -85,39 +85,42 @@ namespace DrinkLib
     /// </summary>
     public class RecipeCollection : ICollection<Recipe>
     {
+        // Interfaces
         public IEnumerator<Recipe> GetEnumerator()
         {
             return new RecipeEnumerator(this);
         }
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new RecipeEnumerator(this);
         }
 
-        // Private inner collection to store the working set of Recipes.
+        // Private variables
         private List<Recipe> innerCol;
-
-        // For IsReadOnly
         private bool isRO = false;
 
+        // Constructors
         // When initialized creates the empty list for the innerCol.
         public RecipeCollection()
         {
             innerCol = new List<Recipe>();
         }
 
-        // Adds ability to index it like an array.
+        // Indexing
         public Recipe this[int index]
         {
             get { return (Recipe)innerCol[index]; }
             set { innerCol[index] = value; }
         }
 
+        // ICollection Functions
+        /// <summary>
+        /// Adds a Recipe to the collection, after checking if the Recipe does not already exist in the collection.
+        /// </summary>
+        /// <param name="newDrink">New Recipe object to be aded.</param>
         public void Add(Recipe newDrink)
         {
             #if DEBUG
-            Console.WriteLine("");
             Console.WriteLine("Add {0}", newDrink.ToString());
             #endif
 
@@ -132,7 +135,7 @@ namespace DrinkLib
                 innerCol.Add(newDrink);
                 
                 #if DEBUG
-                Console.WriteLine("Added.\t\t\t\tinnerCol: {0}", innerCol.Count);
+                Console.WriteLine("Added.\t\t\t\t\tinnerCol: {0}", innerCol.Count);
                 #endif
             }
         }
@@ -199,6 +202,11 @@ namespace DrinkLib
             return result;
         }
 
+        // Public Functions
+        /// <summary>
+        /// List all the drinks, with no ingredients as a string.
+        /// </summary>
+        /// <returns>String that contains all drink names.</returns>
         public string ListDrinks()
         {
             string drinkNames;
@@ -208,6 +216,35 @@ namespace DrinkLib
                 drinkNames += String.Format("\n{0}", drink.Name);
             }
             return drinkNames;
+        }
+
+        /// <summary>
+        /// List all the drinks with their ingredients as a string.
+        /// </summary>
+        /// <returns>String that contains all drinks and recipes.</returns>
+        public string ListFullDrinks()
+        {
+            string drinkNames;
+            drinkNames = "All Drinks:";
+            foreach (Recipe drink in innerCol)
+            {
+                string ingredients = String.Join(", ", drink.Ingredients);
+                drinkNames += String.Format("\n{0}:\n\t{1}\n", drink.Name, ingredients);
+            }
+            return drinkNames;
+        }
+
+        /// <summary>
+        /// Returns a random drink from the innerCollection.
+        /// </summary>
+        /// <returns>A random Recipe.</returns>
+        public Recipe RandomDrink()
+        {
+            Random random = new Random();
+
+            Recipe randomRecipe = this[random.Next(0, innerCol.Count)];
+
+            return randomRecipe;
         }
     }
     

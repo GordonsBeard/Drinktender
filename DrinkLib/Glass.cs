@@ -23,24 +23,32 @@ namespace DrinkLib
         // Constructors
         public Glass()
         {
-            this.Type = DrinkEnums.GlassTypeEnum.Undefined;
         }
-        public Glass(DrinkEnums.GlassTypeEnum type)
+        public Glass(DrinkEnums.GlassTypeEnum impliedType)
         {
-            this.Type = type;
+            this.SetType(impliedType);
         }
 
         public Glass(string impliedType)
         {
-            this.Type = ((DrinkEnums.GlassTypeEnum)Enum.Parse(typeof(DrinkEnums.GlassTypeEnum), impliedType.Trim()));
+            this.SetType(impliedType);
         }
 
         // Functions
         public void SetType(string impliedType)
         {
-            DrinkEnums.GlassTypeEnum glassEnum = (DrinkEnums.GlassTypeEnum)Enum.Parse(typeof(DrinkEnums.GlassTypeEnum), impliedType.ToString());
-            this.glassType = glassEnum;
+            DrinkEnums.GlassTypeEnum glassEnum;
+            try
+            {
+                glassEnum = (DrinkEnums.GlassTypeEnum)Enum.Parse(typeof(DrinkEnums.GlassTypeEnum), impliedType.ToString());
+                this.glassType = glassEnum;
+            }
+            catch (ArgumentException)
+            {
+                throw new InvalidGlassException(impliedType.ToString());
+            }
         }
+
         public void SetType(DrinkEnums.GlassTypeEnum glassEnum)
         {
             this.glassType = glassEnum;

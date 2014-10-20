@@ -1,11 +1,5 @@
-﻿// Liquors
-Vodka,liquor
-Rum,White Rum,liquor
-Spiced Rum,liquor
-Dark Rum,liquor
-Gin,liquor
-Tequila,liquor
-Cola,soda
-TripleSec,liqueur
-SimpleSyrup,syrup
-Ice,ice
+﻿Alcohol:	Vodka, Rum, White Rum, Spiced Rum, Dark Rum, Gin, Tequila
+Liqueur:	Triple Sec, Grand Mariner, Kahlua,
+Soda:		Tonic, Soda, Cola, Sprite
+Syrup:		Simple Syrup, Grenadine, Sweetened Lime Juice
+Ice:		Ice

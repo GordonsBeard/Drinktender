@@ -13,32 +13,87 @@ namespace DrinkLib
     /// </summary>
     public class Ingredient
     {
+
         // Properties
+        private IngredientType type;
+
         public string Name { get; set; }
-        public IngredientType Type { get; set; }
+        public IngredientType Type
+        {
+            get
+            {
+                return this.type;
+            }
+        }
 
         // Constructors
         public Ingredient()
         {
             this.Name = String.Empty;
-            this.Type = new IngredientType(DrinkEnums.IngredientTypeEnum.Undefined);
+            this.SetType(DrinkEnums.IngredientTypeEnum.Undefined);
         }
 
         public Ingredient(string name)
         {
             this.Name = name;
-            this.Type = new IngredientType(DrinkEnums.IngredientTypeEnum.Undefined);
+            this.SetIngredientTypeByName(name);
         }
+
         public Ingredient(string name, IngredientType type)
         {
             this.Name = name;
-            this.Type = type;
+            this.SetType(type);
+        }
+
+        // Functions
+        private void SetType(DrinkEnums.IngredientTypeEnum value)
+        {
+            this.type = new IngredientType(value);
+        }
+
+        private void SetType(IngredientType value)
+        {
+            this.type = value;
+        }
+
+        private void SetType(string value)
+        {
+            DrinkEnums.IngredientTypeEnum ingType = (DrinkEnums.IngredientTypeEnum)Enum.Parse(typeof(DrinkEnums.IngredientTypeEnum), value);
+            this.type = new IngredientType(ingType);
+        }
+
+        private void SetIngredientTypeByName(string ingredientName)
+        {
+            Dictionary<string, List<string>> typesOfIngDict = new Dictionary<string, List<string>>();
+
+            typesOfIngDict.Add("Alcohol", new List<string>  { "Vodka", "Rum", "White Rum", "Spiced Rum", "Dark Rum", "Gin", "Tequila" });
+            typesOfIngDict.Add("Soda", new List<string>     { "Tonic", "Soda", "Spiced Rum", "Cola", "Gin", "Sprite" });
+            typesOfIngDict.Add("Liquer", new List<string>   { "Triple Sec", "Grand Mariner", "Kahlua", "Irish Creme" });
+            typesOfIngDict.Add("Syrup", new List<string>    { "Simple Syrup", "Grenadine", "Sweetened Lime Juice" });
+            typesOfIngDict.Add("Ice", new List<string>      { "Ice" });
+            typesOfIngDict.Add("Juice", new List<string>    { "Olive Juice", "Lemon Juice", "Orange Juice", "Lime Juice" });
+            typesOfIngDict.Add("Food", new List<string>     { "Olive", "Lemon Wedge", "Celery" });
+            typesOfIngDict.Add("Bitters", new List<string>  { "Bitters" });
+
+            foreach (KeyValuePair<string, List<string>> ingredientClassObj in typesOfIngDict)
+            {
+                // If the recipe's ingredients are known, automatically infer their type.
+                if (ingredientClassObj.Value.Contains(ingredientName))
+                {
+                    SetType(ingredientClassObj.Key.ToString());
+                }
+                // Else give them a type of Undefined.
+                else
+                {
+                    SetType(DrinkEnums.IngredientTypeEnum.Undefined);
+                }
+            }
         }
 
         // Overrides
         public override string ToString()
         {
-            return String.Format("Ingredient: {0}", this.Name);
+            return this.Name;
         }
     }
 

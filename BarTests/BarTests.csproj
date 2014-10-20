@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\testInvalidRecipesDuplicateDrinks.txt" />
+    <Content Include="Resources\testInvalidRecipesDuplicateIngredients.txt" />
     <Content Include="Resources\testInvalidRecipesEmptyFile.txt" />
     <Content Include="Resources\testInvalidRecipesGarbage.txt" />
     <Content Include="Resources\testInvalidRecipesShuffledIngredients.txt" />
